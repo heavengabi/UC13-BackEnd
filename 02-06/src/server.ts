@@ -31,3 +31,9 @@ app.listen(PORTA, ()=>{
 })
 
 //http://localhost:3000/servidor
+
+app.get("/nome", (req, res)=>{
+    //res.status(200) = servidor vai enviar um codigo de sucesso
+    //send é o que envia a mensagem
+    res.status(200).send("Gabriela")
+})
