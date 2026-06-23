@@ -1,5 +1,6 @@
 import express from "express";
 import { pool } from "./database";
+import { json } from "node:stream/consumers";
 
 const app = express();
 
@@ -60,6 +61,26 @@ app.delete("/livros/:id", async (req, res) => {
     return res.status(200).json("Livro excluído");
   } catch (erro) {
     return res.status(500).json("Erro interno do servidor: " + erro);
+  }
+});
+
+app.patch("/livros/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const campos = req.body;
+    const keys = Object.keys(campos);
+    const values = Object.values(campos);
+    if (keys.length === 0) {
+      return res.status(400).json("Nenhum campo enviado para atualização.");
+    }
+    const setClause = keys.map((key) => `${key} = ?`).join(",");
+    await pool.query(`UPDATE livros SET ${setClause} WHERE id = ?`, [
+      ...values,
+      id,
+    ]);
+    return res.status(200).json("Livro atualizado parcialmente com sucesso!");
+  } catch (erro) {
+    return res.status(500).json("Erro interno do servidor" + erro);
   }
 });
 
