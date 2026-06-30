@@ -1,66 +1,152 @@
-import { Request, response, Response } from "express";
+import { Request, Response } from "express";
 import { UserService } from "../services/UserService";
 
-export class UserController {
-  private service = new UserService();
-  async createUsuario(req: Request, res: Response) {
-    try {
-      const { email, password } = req.body;
-      if (!email || !password) {
-        return res
-          .status(400)
-          .json({ mensagem: "Email e senha são obrigatorios" });
-      }
-      await this.service.create(email, password);
-      return res.status(201).json({ mensagem: "Usuario criado com sucesso" });
-    } catch {
-      return res.status(500).json({ mensagem: "Erro ao criar usuario" });
+export class UsuarioController {
+
+    private service = new UserService();
+
+    async createUsuario(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const { email, senha } = req.body;
+
+            if (!email || !senha) {
+                return res.status(400).json({
+                    mensagem: "Email e senha são obrigatórios"
+                });
+            }
+
+            await this.service.create(
+                email,
+                senha
+            );
+
+            return res.status(201).json({
+                mensagem: "Usuário criado com sucesso"
+            });
+
+        } catch {
+
+            return res.status(500).json({
+                mensagem: "Erro interno"
+            });
+
+        }
     }
-  }
-  async listUsers(req: Request, res: Response) {
-    try {
-      const users = await this.service.findAll();
-      return res.status(200).json(users);
-    } catch {
-      return res.status(500).json({ mensagem: "Erro ao listar usuarios" });
+
+    async listUsuarios(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const usuarios =
+                await this.service.findAll();
+
+            return res.status(200).json(
+                usuarios
+            );
+
+        } catch {
+
+            return res.status(500).json({
+                mensagem: "Erro interno"
+            });
+
+        }
     }
-  }
-  async getUser(req: Request, res: Response) {
-    try {
-      const id = req.params.id;
-      const user = await this.service.findById(Number(id));
-      if (!user) {
-        return res.status(404).json({ mensagem: "Usuario não encontrado" });
-      }
-      return res.status(200).json(user);
-    } catch {
-      return res.status(500).json({ mensagem: "Erro ao buscar usuario" });
+
+    async getUsuario(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const id = Number(
+                req.params.id
+            );
+
+            const usuario =
+                await this.service.findById(id);
+
+            if (!usuario) {
+                return res.status(404).json({
+                    mensagem: "Usuário não encontrado"
+                });
+            }
+
+            return res.status(200).json(
+                usuario
+            );
+
+        } catch {
+
+            return res.status(500).json({
+                mensagem: "Erro interno"
+            });
+
+        }
     }
-  }
-  async updateUser(req: Request, res: Response) {
-    try {
-      const { email, password } = req.body;
-      const id = req.params.id;
-      if (!email || !password) {
-        return res
-          .status(400)
-          .json({ mensagem: "Email e senha são obrigatorios" });
-      }
-      await this.service.update(Number(id), email, password);
-      return res
-        .status(200)
-        .json({ mensagem: "Usuario atualizado com sucesso" });
-    } catch {
-      return res.status(500).json({ mensagem: "Erro ao atualizar usuario" });
+
+    async updateUsuario(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const id = Number(
+                req.params.id
+            );
+
+            const { email, senha } = req.body;
+
+            await this.service.update(
+                id,
+                email,
+                senha
+            );
+
+            return res.status(200).json({
+                mensagem: "Usuário atualizado com sucesso"
+            });
+
+        } catch {
+
+            return res.status(500).json({
+                mensagem: "Erro interno"
+            });
+
+        }
     }
-  }
-  async deleteUser(req: Request, res: Response) {
-    try {
-      const id = req.params.id;
-      await this.service.delete(Number(id));
-      return res.status(200).json({ mensagem: "Usuario deletado com sucesso" });
-    } catch {
-      return res.status(500).json({ mensagem: "Erro ao deletar usuario" });
+
+    async deleteUsuario(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const id = Number(
+                req.params.id
+            );
+
+            await this.service.delete(id);
+
+            return res.status(204).send();
+
+        } catch {
+
+            return res.status(500).json({
+                mensagem: "Erro interno"
+            });
+
+        }
     }
-  }
 }

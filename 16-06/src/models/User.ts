@@ -1,35 +1,40 @@
 export class User {
-    private id?:number;
-    private email:string;
-    private password:string;
 
-    constructor(id:number, email:string, password:string){
-        this.id = id
-        this.email = email
-        this.password = password
-    } 
-    getId(): number | undefined {
+    private id?: number;
+    private email: string;
+    private senha: string;
+
+    constructor(
+        email: string,
+        senha: string,
+        id?: number
+    ) {
+        this.id = id;
+        this.email = email;
+        this.senha = senha;
+    }
+
+    public getId(): number | undefined {
         return this.id;
     }
 
-    getEmail(): string {
+    public setId(id: number): void {
+        this.id = id;
+    }
+
+    public getEmail(): string {
         return this.email;
     }
 
-    getPassword(): string {
-        return this.password;
+    public setEmail(email: string): void {
+        this.email = email;
     }
 
-    setId (id:number):void{
-        this.id = id
+    public getSenha(): string {
+        return this.senha;
     }
 
-    setEmail (email:string):void{
-        this.email = email
+    public setSenha(senha: string): void {
+        this.senha = senha;
     }
-
-    setPassword (password:string):void{
-        this.password = password
-    }
-
 }

@@ -1,19 +1,20 @@
+
 import { db } from "../config/database";
 import { User } from "../models/User";
-
 export class UserService {
-    async create(email: string, password: string) {
-        if (email.length == 0 || password.length == 0) {
-            throw new Error("Informações inválidas");
-        }
 
-        const user = new User( email, password);
+    async create(email: string, senha: string) {
 
-        const [result] = await db.query(
-            "insert into usuario(email, senha) values (?, ?)",
+        const usuario = new User(
+            email,
+            senha
+        );
+
+        const [result]:any = await db.query(
+            "INSERT INTO usuarios (email, senha) VALUES (?, ?)",
             [
-                user.getEmail(),
-                user.getPassword()
+                usuario.getEmail(),
+                usuario.getSenha()
             ]
         );
 
@@ -21,13 +22,18 @@ export class UserService {
     }
 
     async findAll() {
-        const [rows] = await db.query("select * from usuario");
+
+        const [rows]:any = await db.query(
+            "SELECT * FROM usuarios"
+        );
+
         return rows;
     }
 
     async findById(id: number) {
+
         const [rows]: any = await db.query(
-            "select * from usuario where id = ?",
+            "SELECT * FROM usuarios WHERE id = ?",
             [id]
         );
 
@@ -37,13 +43,16 @@ export class UserService {
     async update(
         id: number,
         email: string,
-        password: string
+        senha: string
     ) {
-        const [result] = await db.query(
-            "update usuario set email = ?, senha = ? where id = ?",
+
+        const [result]:any = await db.query(
+            `UPDATE usuarios
+             SET email = ?, senha = ?
+             WHERE id = ?`,
             [
                 email,
-                password,
+                senha,
                 id
             ]
         );
@@ -52,8 +61,9 @@ export class UserService {
     }
 
     async delete(id: number) {
-        const [result] = await db.query(
-            "delete from usuario where id = ?",
+
+        const [result]:any = await db.query(
+            "DELETE FROM usuarios WHERE id = ?",
             [id]
         );
 
